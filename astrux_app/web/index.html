@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASTRUX | Unlocking Your Cosmic Blueprint</title>
+
+  <!-- SEO -->
+  <meta name="description" content="ASTRUX Astrology - Personalized Kundli, Dasha, Horoscope & Cosmic Insights">
+  <meta name="keywords" content="Astrology, Kundli, Horoscope, Dasha, ASTRUX, Vedic Astrology">
+  <meta name="author" content="ASTRUX">
+
+  <!-- Mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0B0B15">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Flutter Web -->
+  <base href="/">
+
+  <style>
+    /* Cosmic Loading Screen */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1b1b3a, #0b0b15);
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .logo {
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 6px;
+      color: #7B5CFF;
+    }
+
+    .tagline {
+      margin-top: 10px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .loader {
+      margin-top: 30px;
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid #7B5CFF;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading">
+    <div class="logo">ASTRUX</div>
+    <div class="tagline">Unlocking Your Cosmic Blueprint</div>
+    <div class="loader"></div>
+  </div>
+
+  <!-- Flutter App -->
+  <script src="flutter.js" defer></script>
+  <script>
+    window.addEventListener('load', function () {
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: null,
+        },
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            document.getElementById('loading').remove();
+            appRunner.runApp();
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
