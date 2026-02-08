@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Poppins, Cinzel } from "next/font/google"; // Import fonts
+import { Poppins, Cinzel } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -16,8 +18,8 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "ASTRUX | Unlocking Your Cosmic Blueprint",
-  description: "Personalized Astrology for Modern Life. Get your free horoscope and book consultations.",
+  title: "Astrux | Accurate Astrology. Clear Guidance.",
+  description: "Your daily guide to the cosmos. Accurate Panchang, Muhurat, Kundli, and Horoscope readings with a modern touch.",
 };
 
 export default function RootLayout({
@@ -26,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${poppins.variable} ${cinzel.variable} antialiased`}
       >
@@ -36,7 +38,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-1 pt-16">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
