@@ -1,142 +1,132 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Star, PartyPopper, ArrowRight, MapPin, Sparkles, ScrollText } from "lucide-react";
+import { GradientText } from "@/components/ui/gradient-text";
+import { Calendar, Clock, Star, PartyPopper, ArrowRight, Sparkles, ScrollText, Heart } from "lucide-react";
 
 export default function Home() {
     return (
         <div className="flex flex-col gap-20 pb-20">
             {/* HERO SECTION */}
-            <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-                {/* Background Elements */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-background to-background z-0" />
-                <div className="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-20 left-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+            <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+                {/* Animated Cosmic Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-100/40 via-background to-indigo-100/40 dark:from-purple-900/20 dark:via-background dark:to-indigo-900/20 z-0" />
+                <div className="absolute inset-0 cosmic-bg z-0" />
 
-                <div className="container relative z-10 px-6 text-center space-y-8 max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-7xl font-heading font-bold leading-tight animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-                        Unlocking <br />
-                        <span className="text-primary bg-clip-text">Cosmic Energy</span>
-                    </h1>
+                {/* Floating Orbs */}
+                <div className="absolute top-20 right-20 w-96 h-96 bg-purple-400/30 dark:bg-purple-500/20 rounded-full blur-3xl animate-glow-pulse" />
+                <div className="absolute bottom-20 left-20 w-80 h-80 bg-indigo-400/30 dark:bg-indigo-500/20 rounded-full blur-3xl animate-float" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-300/20 dark:bg-violet-500/10 rounded-full blur-3xl" />
 
-                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-                        Discover your path with precise Panchang, Kundli, and Horoscope readings based on ancient Vedic calculations.
-                    </p>
+                <div className="container relative z-10 px-6 text-center space-y-8 max-w-5xl mx-auto">
+                    <div className="space-y-6 flex flex-col items-center">
+                        <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-bold leading-tight tracking-tight text-center">
+                            Unlock Your <br className="hidden sm:block" />
+                            <GradientText gradient="cosmic" className="text-3xl sm:text-5xl md:text-7xl font-heading font-bold block mt-2">
+                                Cosmic Destiny
+                            </GradientText>
+                        </h1>
+                        <p className="text-sm sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-center px-4">
+                            Journey through the stars with precise Vedic astrology. Discover your path with ancient wisdom and modern clarity.
+                        </p>
+                    </div>
 
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-                        <div className="relative group">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                            <input
-                                type="text"
-                                placeholder="New Delhi, India"
-                                className="pl-9 pr-4 py-3 rounded-full bg-background border border-input focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64 shadow-sm"
-                            />
-                        </div>
-                        <Link href="/panchang">
-                            <Button variant="premium" size="lg" className="rounded-full px-8 text-base shadow-lg hover:shadow-primary/25 transition-all hover:scale-105">
-                                <Sparkles className="mr-2 w-4 h-4" /> View Today's Panchang
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+                        <Link href="/kundli">
+                            <Button variant="cosmic" size="xl" className="group">
+                                <Sparkles className="mr-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                Generate Free Kundli
                             </Button>
                         </Link>
-                        <Link href="/kundli">
-                            <Button variant="outline" size="lg" className="rounded-full px-8 text-base border-primary/20 hover:bg-primary/5 hover:text-primary transition-all">
-                                <ScrollText className="mr-2 w-4 h-4" /> Generate Kundli
+                        <Link href="/panchang">
+                            <Button variant="outline" size="xl" className="border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400">
+                                <ScrollText className="mr-2 w-5 h-5" />
+                                Today's Panchang
                             </Button>
                         </Link>
                     </div>
                 </div>
             </section>
 
-            {/* QUICK CARDS SECTION */}
-            <section className="container px-6 -mt-20 relative z-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <QuickCard
-                        title="Today's Panchang"
-                        desc="Tithi, Nakshatra, Yoga"
-                        icon={<Calendar className="w-6 h-6 text-orange-500" />}
-                        href="/panchang"
-                        delay={0}
-                    />
-                    <QuickCard
-                        title="Auspicious Muhurat"
-                        desc="Shubh, Choghadiya, Rahu Kalam"
-                        icon={<Clock className="w-6 h-6 text-purple-500" />}
-                        href="/muhurat"
-                        delay={100}
-                    />
-                    <QuickCard
-                        title="Daily Horoscope"
-                        desc="Predictions for your sign"
-                        icon={<Star className="w-6 h-6 text-blue-500" />}
-                        href="/horoscope"
-                        delay={200}
-                    />
-                    <QuickCard
-                        title="Festivals Today"
-                        desc="Upcoming Vrats & Events"
-                        icon={<PartyPopper className="w-6 h-6 text-red-500" />}
-                        href="/festivals"
-                        delay={300}
-                    />
-                </div>
-            </section>
-
-            {/* POPULAR TOOLS */}
-            <section className="container px-6 py-10">
+            {/* FEATURES SECTION */}
+            <section className="container px-4 md:px-6 py-12 relative z-10">
                 <div className="text-center mb-16 space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold">Popular Astrology Tools</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                        Everything you need to navigate your spiritual journey, simplified.
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold">
+                        Explore <GradientText gradient="cosmic">Cosmic Services</GradientText>
+                    </h2>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                        Comprehensive Vedic astrology tools grouped for your convenience.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <ToolCard
-                        title="Free Kundli Generator"
-                        description="Create your detailed birth chart (Janampatri) instantly. Understand your planetary positions and doshas."
-                        cta="Create Kundli"
-                        href="/kundli"
-                        image="/kundli-chart.png" // Placeholder
-                    />
-                    <ToolCard
-                        title="Event Planner (Muhurat)"
-                        description="Find the most auspicious dates for marriage, griha pravesh, vehicle purchase, and more."
-                        cta="Find Dates"
-                        href="/event-muhurat"
-                        image="/muhurat-calendar.png"
-                    />
-                    <ToolCard
-                        title="Matchmaking (Gun Milan)"
-                        description="Check compatibility for marriage based on Vedic Ashtakoot Guna Milan system."
-                        cta="Check Signs"
-                        href="/matchmaking" // We can redirect to kundli for now if not separate
-                        image="/matchmaking.png"
-                    />
-                </div>
-            </section>
-
-            {/* TRUST SECTION */}
-            <section className="bg-secondary/30 py-24">
-                <div className="container px-6">
-                    <div className="flex flex-col md:flex-row items-center gap-12">
-                        <div className="flex-1 space-y-6">
-                            <h2 className="text-3xl md:text-4xl font-heading font-bold">Why Trust Astrux?</h2>
-                            <div className="space-y-4">
-                                <TrustItem title="Precise Calculations" desc="We use NASA-grade ephemeris data corrected for ayanamsa for pinpoint accuracy." />
-                                <TrustItem title="Ancient Wisdom, Modern UI" desc="No clutter, no confusion. Just pure vedic insights presented clearly." />
-                                <TrustItem title="Privacy First" desc="Your birth details are stored locally or securely encrypted. We never sell your data." />
-                            </div>
-                            <div className="pt-4">
-                                <Button variant="outline">Read Our Story</Button>
-                            </div>
+                <div className="space-y-16">
+                    {/* Group 1: Daily Insights */}
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4">
+                            <div className="h-px bg-border flex-1" />
+                            <span className="text-lg font-heading font-semibold text-muted-foreground uppercase tracking-widest">Daily Insights</span>
+                            <div className="h-px bg-border flex-1" />
                         </div>
-                        <div className="flex-1 relative">
-                            <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center p-10 relative overflow-hidden ring-1 ring-border">
-                                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
-                                <div className="relative z-10 text-center space-y-4">
-                                    <span className="text-6xl font-heading font-bold text-foreground">100%</span>
-                                    <p className="text-xl text-muted-foreground">Vedic Accuracy</p>
-                                </div>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                            <FeatureCard
+                                title="Daily Panchang"
+                                description="Accurate Tithi, Nakshatra, Yoga, and Karana for your location every day."
+                                cta="View Panchang"
+                                href="/panchang"
+                                icon={<Calendar className="w-10 h-10" />}
+                                gradient="from-orange-500/20 to-amber-500/20"
+                            />
+                            <FeatureCard
+                                title="Daily Horoscope"
+                                description="Personalized predictions for your zodiac sign to guide your day."
+                                cta="Read Horoscope"
+                                href="/horoscope"
+                                icon={<Star className="w-10 h-10" />}
+                                gradient="from-blue-500/20 to-cyan-500/20"
+                            />
+                            <FeatureCard
+                                title="Festival Calendar"
+                                description="Stay updated with upcoming Vrats, Purnima, Amavasya, and cultural events."
+                                cta="See Festivals"
+                                href="/festivals"
+                                icon={<PartyPopper className="w-10 h-10" />}
+                                gradient="from-pink-500/20 to-rose-500/20"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Group 2: Vedic Services */}
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4">
+                            <div className="h-px bg-border flex-1" />
+                            <span className="text-lg font-heading font-semibold text-muted-foreground uppercase tracking-widest">Vedic Services</span>
+                            <div className="h-px bg-border flex-1" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                            <FeatureCard
+                                title="Kundli Generator"
+                                description="Create your detailed birth chart (Janampatri) with planetary positions and dosha analysis."
+                                cta="Create Kundli"
+                                href="/kundli"
+                                icon={<ScrollText className="w-10 h-10" />}
+                                gradient="from-purple-600/20 to-indigo-600/20"
+                            />
+                            <FeatureCard
+                                title="Matchmaking"
+                                description="Check compatibility for marriage based on the Vedic Ashtakoot Guna Milan system."
+                                cta="Check Compatibility"
+                                href="/matchmaking"
+                                icon={<Heart className="w-10 h-10" />}
+                                gradient="from-red-500/20 to-rose-500/20"
+                            />
+                            <FeatureCard
+                                title="Muhurat Finder"
+                                description="Find auspicious timings for important events, travel, and new beginnings."
+                                cta="Find Muhurat"
+                                href="/muhurat"
+                                icon={<Clock className="w-10 h-10" />}
+                                gradient="from-violet-500/20 to-purple-500/20"
+                            />
                         </div>
                     </div>
                 </div>
@@ -145,55 +135,23 @@ export default function Home() {
     );
 }
 
-function QuickCard({ title, desc, icon, href, delay }: { title: string, desc: string, icon: React.ReactNode, href: string, delay: number }) {
+function FeatureCard({ title, description, cta, href, icon, gradient }: { title: string, description: string, cta: string, href: string, icon: React.ReactNode, gradient: string }) {
     return (
-        <Link
-            href={href}
-            className="glass p-6 rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group border border-border bg-card/50"
-            style={{ animationDelay: `${delay}ms` }}
-        >
-            <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-lg bg-background border border-border group-hover:bg-secondary transition-colors">
+        <div className="group rounded-3xl border border-border bg-card overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
+            <div className={`h-40 bg-gradient-to-br ${gradient} w-full relative overflow-hidden flex items-center justify-center`}>
+                <div className="absolute inset-0 cosmic-bg opacity-20" />
+                <div className="relative z-10 text-primary group-hover:scale-110 transition-transform duration-500 drop-shadow-sm">
                     {icon}
                 </div>
-                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100" />
             </div>
-            <h3 className="font-heading font-bold text-lg mb-1 group-hover:text-primary transition-colors">{title}</h3>
-            <p className="text-sm text-muted-foreground">{desc}</p>
-        </Link>
-    )
-}
-
-function ToolCard({ title, description, cta, href }: { title: string, description: string, cta: string, href: string, image?: string }) {
-    return (
-        <div className="group rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl transition-all duration-300">
-            <div className="h-48 bg-gradient-to-br from-secondary to-muted w-full relative overflow-hidden">
-                {/* Abstract pattern placeholder */}
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-foreground to-transparent" />
-                <div className="absolute bottom-0 right-0 p-8 opacity-20 transform translate-x-10 translate-y-10 group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-500">
-                    <Sparkles className="w-32 h-32" />
-                </div>
-            </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 flex flex-col flex-1">
                 <h3 className="text-xl font-heading font-bold">{title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
-                <Link href={href}>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">{description}</p>
+                <Link href={href} className="pt-2">
                     <Button variant="link" className="p-0 h-auto font-semibold text-primary group-hover:gap-2 transition-all">
-                        {cta} <ArrowRight className="w-4 h-4 ml-1" />
+                        {cta} <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </Button>
                 </Link>
-            </div>
-        </div>
-    )
-}
-
-function TrustItem({ title, desc }: { title: string, desc: string }) {
-    return (
-        <div className="flex gap-4">
-            <div className="mt-1 h-2 w-2 rounded-full bg-primary shrink-0" />
-            <div>
-                <h4 className="font-semibold text-foreground">{title}</h4>
-                <p className="text-sm text-muted-foreground">{desc}</p>
             </div>
         </div>
     )

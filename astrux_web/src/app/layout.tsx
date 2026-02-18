@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
-import { Poppins, Cinzel } from "next/font/google";
+import { DM_Sans, DM_Serif_Text } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
 });
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
+const dmSerifText = DM_Serif_Text({
+  variable: "--font-dm-serif-text",
+  weight: ["400"],
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "Astrux | Accurate Astrology. Clear Guidance.",
   description: "Your daily guide to the cosmos. Accurate Panchang, Muhurat, Kundli, and Horoscope readings with a modern touch.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -30,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${poppins.variable} ${cinzel.variable} antialiased`}
+        className={`${dmSans.variable} ${dmSerifText.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
