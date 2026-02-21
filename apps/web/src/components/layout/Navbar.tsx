@@ -4,22 +4,10 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/mode-toggle"
 import { Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { GradientText } from "@/components/ui/gradient-text"
 
 export function Navbar() {
-    const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20)
-        }
-        window.addEventListener("scroll", handleScroll)
-        return () => window.removeEventListener("scroll", handleScroll)
-    }, [])
 
     const links = [
         { name: "Panchang", href: "/panchang" },
@@ -30,29 +18,19 @@ export function Navbar() {
     ]
 
     return (
-        <nav
-            className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                isScrolled
-                    ? "bg-background/80 backdrop-blur-md border-b border-white/10 py-4 shadow-sm"
-                    : "bg-transparent py-4"
-            )}
-        >
+        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black border-b border-white/10 py-4">
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-3 items-center">
                     {/* Logo - Left */}
-                    <Link href="/" className="flex items-center gap-2 group transition-transform duration-300 hover:scale-105 justify-self-start">
+                    <Link href="/" className="flex items-center group transition-transform duration-300 hover:scale-105 justify-self-start">
                         <Image
                             src="/logo.png"
                             alt="Astrux Logo"
-                            width={40}
-                            height={40}
-                            className="h-10 w-auto object-contain dark:brightness-100"
+                            width={56}
+                            height={56}
+                            className="h-14 w-auto object-contain dark:brightness-100"
                             priority
                         />
-                        <span className="text-xl font-heading font-bold hidden sm:block">
-                            <GradientText gradient="cosmic">ASTRUX</GradientText>
-                        </span>
                     </Link>
 
                     {/* Desktop Links - Center */}
@@ -72,7 +50,6 @@ export function Navbar() {
                     {/* CTA - Right */}
                     <div className="hidden md:flex items-center gap-4 justify-self-end">
                         <Clock />
-                        <ModeToggle />
                         <Link href="/login">
                             <Button variant="outline" size="sm" className="rounded-full border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400">
                                 Login
@@ -93,7 +70,7 @@ export function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-border p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-5">
+                <div className="md:hidden absolute top-full left-0 w-full bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-5">
                     {links.map((link) => (
                         <Link
                             key={link.name}
@@ -104,11 +81,7 @@ export function Navbar() {
                             {link.name}
                         </Link>
                     ))}
-                    <div className="h-px bg-border my-2" />
-                    <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Appearance</span>
-                        <ModeToggle />
-                    </div>
+                    <div className="h-px bg-white/10 my-2" />
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                         <Button variant="outline" className="w-full border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400">
                             Login

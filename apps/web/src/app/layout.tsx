@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Text } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -32,24 +31,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <body
         className={`${dmSans.variable} ${dmSerifText.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1 pt-16">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="flex-1 pt-16">
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
