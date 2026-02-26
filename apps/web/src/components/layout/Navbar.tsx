@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
 export function Navbar() {
@@ -18,48 +17,51 @@ export function Navbar() {
     ]
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black border-b border-white/10 py-4">
-            <div className="container mx-auto px-6">
-                <div className="grid grid-cols-3 items-center">
+        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-black border-b border-white/10 py-3 sm:py-4">
+            <div className="container mx-auto px-4 sm:px-6">
+                <div className="flex items-center justify-between">
                     {/* Logo - Left */}
-                    <Link href="/" className="flex items-center group transition-transform duration-300 hover:scale-105 justify-self-start">
+                    <Link href="/" className="flex items-center group transition-transform duration-300 hover:scale-105">
                         <Image
                             src="/logo.png"
                             alt="Astrux Logo"
                             width={56}
                             height={56}
-                            className="h-14 w-auto object-contain dark:brightness-100"
+                            className="h-10 sm:h-14 w-auto object-contain dark:brightness-100"
                             priority
                         />
                     </Link>
 
                     {/* Desktop Links - Center */}
-                    <div className="hidden md:flex items-center gap-8 justify-self-center">
+                    <div className="hidden md:flex items-center gap-2 lg:gap-3">
                         {links.map((link) => (
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
+                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group whitespace-nowrap px-1"
                             >
                                 {link.name}
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-300 group-hover:w-full" />
                             </Link>
                         ))}
+                        <span className="text-muted-foreground/30">|</span>
+                        <Link
+                            href="/astrologer"
+                            className="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors relative group whitespace-nowrap px-1"
+                        >
+                            For Astrologers
+                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-amber-400 to-amber-300 transition-all duration-300 group-hover:w-full" />
+                        </Link>
                     </div>
 
                     {/* CTA - Right */}
-                    <div className="hidden md:flex items-center gap-4 justify-self-end">
+                    <div className="hidden md:flex items-center gap-4">
                         <Clock />
-                        <Link href="/login">
-                            <Button variant="outline" size="sm" className="rounded-full border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400">
-                                Login
-                            </Button>
-                        </Link>
                     </div>
 
                     {/* Mobile Toggle */}
                     <button
-                        className="md:hidden text-foreground justify-self-end"
+                        className="md:hidden text-foreground p-2 -mr-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle Menu"
                     >
@@ -70,22 +72,24 @@ export function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-black border-b border-white/10 p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-5">
+                <div className="md:hidden absolute top-full left-0 w-full bg-black border-b border-white/10 p-4 sm:p-6 flex flex-col gap-2 shadow-2xl animate-in slide-in-from-top-5">
                     {links.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                            className="text-base sm:text-lg font-medium text-foreground hover:text-primary hover:bg-white/5 rounded-lg px-4 py-3 transition-colors"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             {link.name}
                         </Link>
                     ))}
                     <div className="h-px bg-white/10 my-2" />
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="outline" className="w-full border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400">
-                            Login
-                        </Button>
+                    <Link
+                        href="/astrologer"
+                        className="text-base sm:text-lg font-medium text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg px-4 py-3 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        For Astrologers
                     </Link>
                 </div>
             )}

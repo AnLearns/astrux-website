@@ -1,25 +1,45 @@
-
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { format } from "date-fns"
-import { getPanchang } from "@/lib/astrology"
+import { getPanchang, PanchangData, DEFAULT_LOCATION } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, MapPin, Info, Sunrise, Sunset, Moon, CloudSun } from "lucide-react"
+import { CalendarIcon, MapPin, Sunrise, Sunset, Moon, CloudSun, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function PanchangPage() {
     const [date, setDate] = useState<Date>(new Date())
-    const [location, setLocation] = useState("New Delhi, India")
-    // In a real app, location would be fetched/managed via context or API
+    const [location, setLocation] = useState(DEFAULT_LOCATION.name)
+    const [panchang, setPanchang] = useState<PanchangData | null>(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
-    const panchang = getPanchang(date || new Date(), location)
+    useEffect(() => {
+        fetchPanchang()
+    }, [date])
+
+    async function fetchPanchang() {
+        setLoading(true)
+        setError(null)
+        try {
+            const data = await getPanchang(
+                format(date, "yyyy-MM-dd"),
+                DEFAULT_LOCATION.latitude,
+                DEFAULT_LOCATION.longitude
+            )
+            setPanchang(data)
+        } catch (err) {
+            setError("Failed to fetch panchang data. Please ensure the API server is running.")
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className="min-h-screen bg-background pb-20">
-            {/* Header / Sticky Filter */}
             <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-b border-border py-4 shadow-sm">
                 <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
                     <h1 className="text-2xl font-heading font-bold text-foreground">Daily Panchang</h1>
@@ -62,77 +82,84 @@ export default function PanchangPage() {
                 </div>
             </div>
 
-            {/* Main Content */}
             <div className="container mx-auto px-6 py-10 space-y-10">
+                {loading && (
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <span className="ml-2 text-muted-foreground">Calculating panchang...</span>
+                    </div>
+                )}
 
-                {/* Main Grid: Info Cards */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {error && (
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-6 text-center">
+                        <p className="text-destructive">{error}</p>
+                        <Button onClick={fetchPanchang} variant="outline" className="mt-4">
+                            Try Again
+                        </Button>
+                    </div>
+                )}
 
-                    {/* Primary Info (Tithi/Nakshatra) */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Highlights */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <PanchangCard
-                                title="Tithi"
-                                value={panchang.tithi}
-                                description="The lunar day. Crucial for auspicious beginnings."
-                                icon={<Moon className="w-5 h-5 text-primary" />}
-                                highlight
-                            />
-                            <PanchangCard
-                                title="Nakshatra"
-                                value={panchang.nakshatra}
-                                description="The lunar mansion. Determines daily energy."
-                                icon={<StarIcon />}
-                                highlight
-                            />
+                {!loading && !error && panchang && (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-2 space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <PanchangCard
+                                    title="Tithi"
+                                    value={`${panchang.tithi} ${panchang.paksha} Paksha`}
+                                    description="The lunar day. Crucial for auspicious beginnings."
+                                    icon={<Moon className="w-5 h-5 text-primary" />}
+                                    highlight
+                                />
+                                <PanchangCard
+                                    title="Nakshatra"
+                                    value={`${panchang.nakshatra} (Pada ${panchang.nakshatra_pada})`}
+                                    description="The lunar mansion. Determines daily energy."
+                                    icon={<StarIcon />}
+                                    highlight
+                                />
+                            </div>
+
+                            <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+                                <div className="bg-secondary/30 px-6 py-4 border-b border-border">
+                                    <h3 className="font-heading font-semibold text-lg">Detailed Panchang</h3>
+                                </div>
+                                <div className="divide-y divide-border/50">
+                                    <DetailRow label="Yoga" value={panchang.yoga} />
+                                    <DetailRow label="Karana" value={panchang.karana} />
+                                    <DetailRow label="Paksha" value={panchang.paksha} />
+                                    <DetailRow label="Ritu (Season)" value={panchang.ritu} />
+                                    <DetailRow label="Vikram Samvat" value={panchang.vikram_samvat.toString()} />
+                                    <DetailRow label="Shaka Samvat" value={panchang.shaka_samvat.toString()} />
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Detailed Table */}
-                        <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
-                            <div className="bg-secondary/30 px-6 py-4 border-b border-border">
-                                <h3 className="font-heading font-semibold text-lg">Detailed Panchang</h3>
+                        <div className="space-y-6">
+                            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-10">
+                                    <CloudSun className="w-24 h-24" />
+                                </div>
+                                <h3 className="font-heading font-semibold text-lg mb-6 relative z-10">Celestial Timings</h3>
+
+                                <div className="space-y-6 relative z-10">
+                                    <TimingRow label="Sunrise" time={panchang.sunrise} icon={<Sunrise className="w-5 h-5 text-orange-400" />} />
+                                    <TimingRow label="Sunset" time={panchang.sunset} icon={<Sunset className="w-5 h-5 text-orange-300" />} />
+                                    <TimingRow label="Moonrise" time={panchang.moonrise} icon={<Moon className="w-5 h-5 text-sky-300" />} />
+                                    <TimingRow label="Moonset" time={panchang.moonset} icon={<Moon className="w-5 h-5 text-slate-400" />} />
+                                </div>
                             </div>
-                            <div className="divide-y divide-border/50">
-                                <DetailRow label="Yoga" value={panchang.yoga} />
-                                <DetailRow label="Karana" value={panchang.karana} />
-                                <DetailRow label="Paksha" value={panchang.paksha} />
-                                <DetailRow label="Ritu (Season)" value={panchang.ritu} />
-                                <DetailRow label="Vikram Samvat" value={panchang.vikramSamvat.toString()} />
-                                <DetailRow label="Shaka Samvat" value={panchang.shakaSamvat.toString()} />
+
+                            <div className="bg-card border border-border rounded-2xl p-6">
+                                <h3 className="font-heading font-semibold text-lg mb-4 text-red-500/80">Inauspicious Periods</h3>
+                                <div className="space-y-4">
+                                    <TimingBox label="Rahu Kalam" time={panchang.rahu_kalam} color="red" />
+                                    <TimingBox label="Yamagandam" time={panchang.yamagandam} color="amber" />
+                                    <TimingBox label="Gulika Kalam" time={panchang.gulika_kalam} color="orange" />
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* Sidebar: Sun/Moon & Timings */}
-                    <div className="space-y-6">
-                        {/* Sun & Moon */}
-                        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <CloudSun className="w-24 h-24" />
-                            </div>
-                            <h3 className="font-heading font-semibold text-lg mb-6 relative z-10">Celestial Timings</h3>
-
-                            <div className="space-y-6 relative z-10">
-                                <TimingRow label="Sunrise" time={panchang.sunrise} icon={<Sunrise className="w-5 h-5 text-orange-400" />} />
-                                <TimingRow label="Sunset" time={panchang.sunset} icon={<Sunset className="w-5 h-5 text-orange-300" />} />
-                                <TimingRow label="Moonrise" time={panchang.moonrise} icon={<Moon className="w-5 h-5 text-sky-300" />} />
-                                <TimingRow label="Moonset" time={panchang.moonset} icon={<Moon className="w-5 h-5 text-slate-400" />} />
-                            </div>
-                        </div>
-
-                        {/* Inauspicious Timings */}
-                        <div className="bg-card border border-border rounded-2xl p-6">
-                            <h3 className="font-heading font-semibold text-lg mb-4 text-red-500/80">Inauspicious Periods</h3>
-                            <div className="space-y-4">
-                                <TimingBox label="Rahu Kalam" time={panchang.rahuKalam} color="red" />
-                                <TimingBox label="Yamagandam" time={panchang.yamagandam} color="amber" />
-                                <TimingBox label="Gulika Kalam" time={panchang.gulikaKalam} color="orange" />
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                )}
             </div>
         </div>
     )

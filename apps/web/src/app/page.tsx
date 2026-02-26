@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GradientText } from "@/components/ui/gradient-text";
-import { Calendar, Clock, Star, PartyPopper, ArrowRight, Sparkles, ScrollText, Heart } from "lucide-react";
+import { Calendar, Clock, Star, PartyPopper, ArrowRight, Sparkles, ScrollText, Heart, Hand } from "lucide-react";
 
 export default function Home() {
     return (
@@ -20,7 +20,7 @@ export default function Home() {
 
                 <div className="container relative z-10 px-6 text-center space-y-8 max-w-5xl mx-auto">
                     <div className="space-y-6 flex flex-col items-center">
-                        <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-bold leading-tight tracking-tight text-center">
+                        <h1 className="text-3xl sm:text-5xl md:text-7xl font-heading font-bold leading-tight text-center">
                             Unlock Your <br className="hidden sm:block" />
                             <GradientText gradient="cosmic" className="text-3xl sm:text-5xl md:text-7xl font-heading font-bold block mt-2">
                                 Cosmic Destiny
@@ -41,7 +41,7 @@ export default function Home() {
                         <Link href="/panchang">
                             <Button variant="outline" size="xl" className="border-purple-400/30 hover:bg-purple-500/10 hover:border-purple-400">
                                 <ScrollText className="mr-2 w-5 h-5" />
-                                Today's Panchang
+                                Today&apos;s Panchang
                             </Button>
                         </Link>
                     </div>
@@ -73,24 +73,24 @@ export default function Home() {
                                 description="Accurate Tithi, Nakshatra, Yoga, and Karana for your location every day."
                                 cta="View Panchang"
                                 href="/panchang"
-                                icon={<Calendar className="w-10 h-10" />}
-                                gradient="from-orange-500/20 to-amber-500/20"
+                                icon={<Calendar className="w-8 h-8" />}
+                                gradient="from-orange-400/30 via-amber-400/20 to-yellow-500/30"
                             />
                             <FeatureCard
                                 title="Daily Horoscope"
                                 description="Personalized predictions for your zodiac sign to guide your day."
                                 cta="Read Horoscope"
                                 href="/horoscope"
-                                icon={<Star className="w-10 h-10" />}
-                                gradient="from-blue-500/20 to-cyan-500/20"
+                                icon={<Star className="w-8 h-8" />}
+                                gradient="from-blue-400/30 via-indigo-400/20 to-violet-500/30"
                             />
                             <FeatureCard
                                 title="Festival Calendar"
                                 description="Stay updated with upcoming Vrats, Purnima, Amavasya, and cultural events."
                                 cta="See Festivals"
                                 href="/festivals"
-                                icon={<PartyPopper className="w-10 h-10" />}
-                                gradient="from-pink-500/20 to-rose-500/20"
+                                icon={<PartyPopper className="w-8 h-8" />}
+                                gradient="from-pink-400/30 via-rose-400/20 to-red-500/30"
                             />
                         </div>
                     </div>
@@ -108,24 +108,32 @@ export default function Home() {
                                 description="Create your detailed birth chart (Janampatri) with planetary positions and dosha analysis."
                                 cta="Create Kundli"
                                 href="/kundli"
-                                icon={<ScrollText className="w-10 h-10" />}
-                                gradient="from-purple-600/20 to-indigo-600/20"
+                                icon={<ScrollText className="w-8 h-8" />}
+                                gradient="from-purple-500/30 via-violet-400/20 to-indigo-500/30"
                             />
                             <FeatureCard
                                 title="Matchmaking"
                                 description="Check compatibility for marriage based on the Vedic Ashtakoot Guna Milan system."
                                 cta="Check Compatibility"
                                 href="/matchmaking"
-                                icon={<Heart className="w-10 h-10" />}
-                                gradient="from-red-500/20 to-rose-500/20"
+                                icon={<Heart className="w-8 h-8" />}
+                                gradient="from-rose-400/30 via-pink-400/20 to-fuchsia-500/30"
                             />
                             <FeatureCard
                                 title="Muhurat Finder"
                                 description="Find auspicious timings for important events, travel, and new beginnings."
                                 cta="Find Muhurat"
                                 href="/muhurat"
-                                icon={<Clock className="w-10 h-10" />}
-                                gradient="from-violet-500/20 to-purple-500/20"
+                                icon={<Clock className="w-8 h-8" />}
+                                gradient="from-violet-400/30 via-purple-400/20 to-indigo-500/30"
+                            />
+                            <FeatureCard
+                                title="Palmistry Reading"
+                                description="Analyze your life, heart, and fate lines with our cosmic palm scanner."
+                                cta="Read Palm"
+                                href="/palmistry"
+                                icon={<Hand className="w-8 h-8" />}
+                                gradient="from-indigo-400/30 via-purple-400/20 to-fuchsia-500/30"
                             />
                         </div>
                     </div>
@@ -137,22 +145,28 @@ export default function Home() {
 
 function FeatureCard({ title, description, cta, href, icon, gradient }: { title: string, description: string, cta: string, href: string, icon: React.ReactNode, gradient: string }) {
     return (
-        <div className="group rounded-3xl border border-border bg-card overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col">
-            <div className={`h-40 bg-gradient-to-br ${gradient} w-full relative overflow-hidden flex items-center justify-center`}>
-                <div className="absolute inset-0 cosmic-bg opacity-20" />
-                <div className="relative z-10 text-primary group-hover:scale-110 transition-transform duration-500 drop-shadow-sm">
-                    {icon}
+        <Link href={href} className="group block">
+            <div className="relative rounded-3xl overflow-hidden h-full">
+                <div className="absolute inset-0 rounded-3xl p-[1px] bg-gradient-to-br from-transparent via-transparent to-transparent group-hover:from-purple-500/50 group-hover:via-pink-500/50 group-hover:to-indigo-500/50 transition-all duration-500" />
+                <div className="relative rounded-[22px] bg-card/80 backdrop-blur-sm border border-white/10 dark:border-white/5 h-full flex flex-col overflow-hidden group-hover:border-purple-500/30 transition-colors duration-500">
+                    <div className={`relative h-44 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}>
+                        <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
+                        <div className="absolute inset-0 cosmic-bg opacity-30" />
+                        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-white/10 dark:bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+                        <div className="absolute -top-12 -left-12 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+                        <div className="relative z-10 p-4 rounded-2xl bg-white/20 dark:bg-white/10 backdrop-blur-sm text-primary group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
+                            {icon}
+                        </div>
+                    </div>
+                    <div className="p-6 space-y-3 flex flex-col flex-1 bg-card/50 backdrop-blur-sm">
+                        <h3 className="text-xl font-heading font-bold group-hover:text-primary transition-colors duration-300">{title}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed flex-1">{description}</p>
+                        <div className="pt-2 flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all duration-300">
+                            {cta} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="p-6 space-y-4 flex flex-col flex-1">
-                <h3 className="text-xl font-heading font-bold">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">{description}</p>
-                <Link href={href} className="pt-2">
-                    <Button variant="link" className="p-0 h-auto font-semibold text-primary group-hover:gap-2 transition-all">
-                        {cta} <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                </Link>
-            </div>
-        </div>
+        </Link>
     )
 }

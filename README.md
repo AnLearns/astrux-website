@@ -8,8 +8,7 @@ Accurate Astrology. Clear Guidance.
 astrux/
 ├── apps/
 │   ├── web/          # Next.js web application
-│   ├── mobile/       # Flutter mobile application
-│   └── archive/      # Archived static website
+│   └── mobile/       # Flutter mobile application
 └── packages/
     └── api/          # Python FastAPI backend
 ```

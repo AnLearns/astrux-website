@@ -21,8 +21,9 @@ export function GradientText({
 }: GradientTextProps) {
     return (
         <span
+            style={{ backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", boxDecorationBreak: "clone", WebkitBoxDecorationBreak: "clone" }}
             className={cn(
-                "bg-clip-text text-transparent",
+                "inline-block pb-0.5",
                 gradientClasses[gradient],
                 className
             )}

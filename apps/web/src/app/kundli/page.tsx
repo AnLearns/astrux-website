@@ -1,26 +1,51 @@
-
 "use client"
 
 import { useState } from "react"
+import { getKundli, KundliData, DEFAULT_LOCATION } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { KundliChart } from "@/components/astrology/KundliChart" // We just created this
-import { CalendarIcon, Clock, MapPin, Download, Share2 } from "lucide-react"
+import { KundliChart } from "@/components/astrology/KundliChart"
+import { CalendarIcon, Clock, MapPin, Download, Share2, Loader2 } from "lucide-react"
 
 export default function KundliPage() {
     const [step, setStep] = useState<"form" | "result">("form")
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [kundliData, setKundliData] = useState<KundliData | null>(null)
+    const [formData, setFormData] = useState({
+        name: "",
+        gender: "Male",
+        dob: "",
+        tob: "",
+        place: DEFAULT_LOCATION.name,
+        latitude: DEFAULT_LOCATION.latitude,
+        longitude: DEFAULT_LOCATION.longitude,
+    })
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
-        // Simulate generation delay
-        setTimeout(() => {
-            setLoading(false)
+        setError(null)
+
+        try {
+            const data = await getKundli(
+                formData.dob,
+                formData.tob,
+                formData.latitude,
+                formData.longitude,
+                formData.name,
+                formData.gender
+            )
+            setKundliData(data)
             setStep("result")
             window.scrollTo(0, 0)
-        }, 1500)
+        } catch (err) {
+            setError("Failed to generate kundli. Please ensure the API server is running.")
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -37,17 +62,33 @@ export default function KundliPage() {
                     </p>
                 </div>
 
+                {error && (
+                    <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-center">
+                        <p className="text-destructive">{error}</p>
+                    </div>
+                )}
+
                 {step === "form" && (
                     <div className="bg-card border border-border rounded-xl p-8 shadow-sm max-w-2xl mx-auto">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Full Name</Label>
-                                    <Input id="name" placeholder="Enter your name" required />
+                                    <Input
+                                        id="name"
+                                        placeholder="Enter your name"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="gender">Gender</Label>
-                                    <select className="flex h-12 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground transition-all duration-300 hover:bg-accent/10" id="gender">
+                                    <select
+                                        className="flex h-12 w-full rounded-md border border-input bg-background/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground transition-all duration-300 hover:bg-accent/10"
+                                        id="gender"
+                                        value={formData.gender}
+                                        onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                                    >
                                         <option>Male</option>
                                         <option>Female</option>
                                         <option>Other</option>
@@ -57,33 +98,64 @@ export default function KundliPage() {
                                     <Label htmlFor="dob">Date of Birth</Label>
                                     <div className="relative">
                                         <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                        <Input id="dob" type="date" className="pl-10" required />
+                                        <Input
+                                            id="dob"
+                                            type="date"
+                                            className="pl-10"
+                                            required
+                                            value={formData.dob}
+                                            onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                                        />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="tob">Time of Birth</Label>
                                     <div className="relative">
                                         <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                        <Input id="tob" type="time" className="pl-10" required />
+                                        <Input
+                                            id="tob"
+                                            type="time"
+                                            className="pl-10"
+                                            required
+                                            value={formData.tob}
+                                            onChange={(e) => setFormData({ ...formData, tob: e.target.value })}
+                                        />
                                     </div>
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
                                     <Label htmlFor="place">Place of Birth</Label>
                                     <div className="relative">
                                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                                        <Input id="place" placeholder="City, State, Country" className="pl-10" required />
+                                        <Input
+                                            id="place"
+                                            placeholder="City, State, Country"
+                                            className="pl-10"
+                                            required
+                                            value={formData.place}
+                                            onChange={(e) => setFormData({ ...formData, place: e.target.value })}
+                                        />
                                     </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Using coordinates: {formData.latitude}, {formData.longitude}
+                                    </p>
                                 </div>
                             </div>
 
                             <Button type="submit" size="lg" className="w-full" disabled={loading}>
-                                {loading ? "Calculating..." : "Generate Kundli"}
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Calculating...
+                                    </>
+                                ) : (
+                                    "Generate Kundli"
+                                )}
                             </Button>
                         </form>
                     </div>
                 )}
 
-                {step === "result" && (
+                {step === "result" && kundliData && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
                         <div className="flex justify-end gap-2">
                             <Button variant="outline" size="sm">
@@ -95,13 +167,13 @@ export default function KundliPage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            {/* Chart Visual */}
                             <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-                                <h3 className="text-xl font-heading font-semibold mb-4 text-center">Lagna Chart (Birth Chart)</h3>
-                                <KundliChart />
+                                <h3 className="text-xl font-heading font-semibold mb-4 text-center">
+                                    Lagna Chart ({kundliData.lagna.sign})
+                                </h3>
+                                <KundliChart planets={kundliData.planets} lagnaSign={kundliData.lagna.sign} />
                             </div>
 
-                            {/* Planetary Table */}
                             <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
                                 <h3 className="text-xl font-heading font-semibold mb-4">Planetary Positions</h3>
                                 <div className="overflow-x-auto">
@@ -115,22 +187,16 @@ export default function KundliPage() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-border/50">
-                                            {[
-                                                { p: "Sun", s: "Leo", d: "14° 30'", h: "5" },
-                                                { p: "Moon", s: "Taurus", d: "02° 15'", h: "2" },
-                                                { p: "Mars", s: "Aries", d: "28° 10'", h: "1" },
-                                                { p: "Mercury", s: "Virgo", d: "10° 45'", h: "6" },
-                                                { p: "Jupiter", s: "Pisces", d: "05° 20'", h: "12" },
-                                                { p: "Venus", s: "Libra", d: "18° 05'", h: "7" },
-                                                { p: "Saturn", s: "Aquarius", d: "09° 55'", h: "11" },
-                                                { p: "Rahu", s: "Gemini", d: "12° 00'", h: "3" },
-                                                { p: "Ketu", s: "Sagittarius", d: "12° 00'", h: "9" },
-                                            ].map((row) => (
-                                                <tr key={row.p} className="hover:bg-accent/5">
-                                                    <td className="px-4 py-3 font-medium text-foreground">{row.p}</td>
-                                                    <td className="px-4 py-3 text-muted-foreground">{row.s}</td>
-                                                    <td className="px-4 py-3 text-muted-foreground">{row.d}</td>
-                                                    <td className="px-4 py-3 text-muted-foreground">{row.h}</td>
+                                            {Object.entries(kundliData.planets).map(([name, data]) => (
+                                                <tr key={name} className="hover:bg-accent/5">
+                                                    <td className="px-4 py-3 font-medium text-foreground">
+                                                        {name} {data.retrograde && "(R)"}
+                                                    </td>
+                                                    <td className="px-4 py-3 text-muted-foreground">{data.sign}</td>
+                                                    <td className="px-4 py-3 text-muted-foreground">
+                                                        {data.sign_degree.toFixed(2)}°
+                                                    </td>
+                                                    <td className="px-4 py-3 text-muted-foreground">{data.house}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -139,14 +205,25 @@ export default function KundliPage() {
                             </div>
                         </div>
 
-                        {/* Analysis Section */}
                         <div className="bg-secondary/20 rounded-xl p-8 space-y-6">
-                            <h2 className="text-2xl font-heading font-bold">Key Insights</h2>
+                            <h2 className="text-2xl font-heading font-bold">Key Details</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <InsightCard title="Personality" content="You have a strong sense of self (Sun in Leo). You are charismatic, generous, and a natural born leader." />
-                                <InsightCard title="Career" content="Mars in Aries indicates a competitive drive. You would excel in military, engineering, or entrepreneurship." />
-                                <InsightCard title="Relationships" content="Venus in Libra gives you a charming and balanced approach to love. You value harmony above all." />
-                                <InsightCard title="Health" content="Saturn's aspect suggests you should take care of your joints and bones. Regular yoga is recommended." />
+                                <InsightCard
+                                    title="Lagna (Ascendant)"
+                                    content={`Your rising sign is ${kundliData.lagna.sign} at ${kundliData.lagna.sign_degree.toFixed(2)}°. This represents your outer personality and how others perceive you.`}
+                                />
+                                <InsightCard
+                                    title="Moon Nakshatra"
+                                    content={`Your Moon is in ${kundliData.moon_nakshatra} Nakshatra, Pada ${kundliData.nakshatra_pada}. This reveals your emotional nature and inner self.`}
+                                />
+                                <InsightCard
+                                    title="Current Dasha"
+                                    content={`You are currently in ${kundliData.dasha}. This period influences your current life themes and experiences.`}
+                                />
+                                <InsightCard
+                                    title="Birth Details"
+                                    content={`Born on ${kundliData.birth_details.date} at ${kundliData.birth_details.time} at coordinates ${kundliData.birth_details.latitude}, ${kundliData.birth_details.longitude}.`}
+                                />
                             </div>
                         </div>
 
