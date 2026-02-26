@@ -10,13 +10,12 @@ export default function Home() {
             {/* HERO SECTION */}
             <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
                 {/* Animated Cosmic Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-100/40 via-background to-indigo-100/40 dark:from-purple-900/20 dark:via-background dark:to-indigo-900/20 z-0" />
-                <div className="absolute inset-0 cosmic-bg z-0" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-background to-background z-0" />
+                <div className="absolute inset-0 cosmic-bg z-0 mix-blend-screen opacity-50 dark:opacity-30" />
 
                 {/* Floating Orbs */}
-                <div className="absolute top-20 right-20 w-96 h-96 bg-purple-400/30 dark:bg-purple-500/20 rounded-full blur-3xl animate-glow-pulse" />
-                <div className="absolute bottom-20 left-20 w-80 h-80 bg-indigo-400/30 dark:bg-indigo-500/20 rounded-full blur-3xl animate-float" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-300/20 dark:bg-violet-500/10 rounded-full blur-3xl" />
+                <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] animate-pulse pointer-events-none" />
+                <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] animate-pulse pointer-events-none" delay-700 />
 
                 <div className="container relative z-10 px-6 text-center space-y-8 max-w-5xl mx-auto">
                     <div className="space-y-6 flex flex-col items-center">
