@@ -14,6 +14,7 @@ export default function HoroscopePage() {
 
     useEffect(() => {
         fetchHoroscope()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSign, activeTab])
 
     async function fetchHoroscope() {

@@ -101,7 +101,7 @@ function Clock() {
     const [time, setTime] = useState<Date | null>(null)
 
     useEffect(() => {
-        setTime(new Date())
+        setTimeout(() => setTime(new Date()), 0)
         const timer = setInterval(() => {
             setTime(new Date())
         }, 1000)

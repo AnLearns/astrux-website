@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { Clock, ShieldCheck, ShieldAlert, Zap } from "lucide-react"
+import { Clock, ShieldCheck, ShieldAlert } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function MuhuratPage() {
@@ -41,7 +41,7 @@ export default function MuhuratPage() {
                 {/* Timeline Visualization */}
                 <div className="max-w-3xl mx-auto space-y-8">
                     <h2 className="text-2xl font-heading font-bold text-center mb-8">
-                        Today's {activeType} (Apr 20, 2024)
+                        Today&apos;s {activeType} (Apr 20, 2024)
                     </h2>
 
                     <div className="relative border-l-2 border-border ml-6 space-y-8">

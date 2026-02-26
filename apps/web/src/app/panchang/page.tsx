@@ -18,6 +18,7 @@ export default function PanchangPage() {
 
     useEffect(() => {
         fetchPanchang()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [date])
 
     async function fetchPanchang() {

@@ -2,7 +2,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Check, Star, Sparkles } from "lucide-react"
+import { Check, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function PremiumPage() {

@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { Play, BookOpen, Music } from "lucide-react"
+import { Play, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const CATEGORIES = ["Aarti", "Chalisa", "Mantra", "Stotram"]
